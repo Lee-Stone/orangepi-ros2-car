@@ -1,0 +1,43 @@
+# robot_localization的EKF参数文件：声明输入话题、使用哪些数据以及输出坐标系
+ekf_filter_node:
+  ros__parameters:
+    # 滤波输出频率50Hz，和IMU、轮式里程计的发布频率一致
+    frequency: 50.0
+    # 超过0.1秒没有收到某个传感器数据就暂时不使用它
+    sensor_timeout: 0.1
+    # 小车只在平面上运动，强制z、roll、pitch为0，减少不必要的状态量
+    two_d_mode: true
+    # 由EKF发布odom到base_link的TF，轮式里程计节点不再发布TF
+    publish_tf: true
+    print_diagnostics: true
+
+    # 里程计坐标系、车体坐标系和融合结果的世界坐标系
+    odom_frame: odom
+    base_link_frame: base_link
+    world_frame: odom
+
+    # 第一个输入：轮式里程计/wheel_odom
+    odom0: /wheel_odom
+    # 15个开关依次为x,y,z,roll,pitch,yaw,vx,vy,vz,vroll,vpitch,vyaw,ax,ay,az
+    # 只使用线速度vx和角速度vyaw，位置由EKF自己积分，避免重复使用轮式位置
+    odom0_config: [false, false, false,
+                   false, false, false,
+                   true,  false, false,
+                   false, false, true,
+                   false, false, false]
+    # 轮式里程计已经是相对起点的累计值，不再做差分或相对处理
+    odom0_differential: false
+    odom0_relative: false
+
+    # 第二个输入：IMU的/imu
+    imu0: /imu
+    # 只使用角速度vyaw，用陀螺仪短时间内的角速度修正轮式里程计的航向
+    # 不使用IMU的绝对yaw，因为MPU6500没有磁力计，yaw会随时间漂移
+    imu0_config: [false, false, false,
+                  false, false, false,
+                  false, false, false,
+                  false, false, true,
+                  false, false, false]
+    imu0_differential: false
+    # IMU原始加速度包含重力分量，EKF使用前先去掉重力加速度
+    imu0_remove_gravitational_acceleration: true
