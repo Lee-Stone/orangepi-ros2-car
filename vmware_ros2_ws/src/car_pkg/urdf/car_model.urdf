@@ -1,0 +1,251 @@
+<?xml version="1.0"?>
+<robot name="orange_pi_car">
+  <material name="caster_red"><color rgba="0.95 0.02 0.02 1"/></material>
+  <material name="caster_silver"><color rgba="0.80 0.80 0.80 1"/></material>
+  <material name="caster_white"><color rgba="0.98 0.98 0.98 1"/></material>
+  <material name="caster_black"><color rgba="0.02 0.02 0.02 1"/></material>
+  <!-- base_link为车体坐标系，odom到base_link由香橙派EKF发布 -->
+
+  <!-- 底盘：底板STL由控制板DXF外形和轮槽生成 -->
+  <link name="base_link">
+    <visual>
+      <origin xyz="0 0 0.043" rpy="0 0 3.14159"/>
+      <geometry><mesh filename="package://car_pkg/urdf/base_plate.stl"/></geometry>
+      <material name="black"><color rgba="0.10 0.10 0.10 1"/></material>
+    </visual>
+    <!-- 电池和两个电机 -->
+    <visual>
+      <origin xyz="-0.030 0 0.033" rpy="0 0 0"/>
+      <geometry><box size="0.060 0.050 0.016"/></geometry>
+      <material name="battery"><color rgba="0.08 0.08 0.08 1"/></material>
+    </visual>
+    <visual>
+      <origin xyz="-0.033 0.045 0.027" rpy="1.5708 0 0"/>
+      <geometry><cylinder radius="0.014" length="0.050"/></geometry>
+      <material name="motor"><color rgba="0.30 0.30 0.30 1"/></material>
+    </visual>
+    <visual>
+      <origin xyz="-0.033 -0.045 0.027" rpy="1.5708 0 0"/>
+      <geometry><cylinder radius="0.014" length="0.050"/></geometry>
+      <material name="motor"><color rgba="0.30 0.30 0.30 1"/></material>
+    </visual>
+    <!-- 固定螺钉 -->
+    <visual>
+      <origin xyz="0.040 0.040 0.048" rpy="0 0 0"/>
+      <geometry><cylinder radius="0.003" length="0.002"/></geometry>
+      <material name="screw"><color rgba="0.80 0.80 0.80 1"/></material>
+    </visual>
+    <visual>
+      <origin xyz="0.040 -0.040 0.048" rpy="0 0 0"/>
+      <geometry><cylinder radius="0.003" length="0.002"/></geometry>
+      <material name="screw"><color rgba="0.80 0.80 0.80 1"/></material>
+    </visual>
+    <visual>
+      <origin xyz="-0.040 0.040 0.048" rpy="0 0 0"/>
+      <geometry><cylinder radius="0.003" length="0.002"/></geometry>
+      <material name="screw"><color rgba="0.80 0.80 0.80 1"/></material>
+    </visual>
+    <visual>
+      <origin xyz="-0.040 -0.040 0.048" rpy="0 0 0"/>
+      <geometry><cylinder radius="0.003" length="0.002"/></geometry>
+      <material name="screw"><color rgba="0.80 0.80 0.80 1"/></material>
+    </visual>
+    <collision><origin xyz="0 0 0" rpy="0 0 3.14159"/><geometry><mesh filename="package://car_pkg/urdf/base_plate.stl"/></geometry></collision>
+  </link>
+
+  <!-- 左右驱动轮，半径24mm，轮距122mm，安装在底盘后部的两个轮槽里 -->
+  <joint name="left_wheel_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="left_wheel"/>
+    <origin xyz="-0.033 0.061 0.024" rpy="1.5708 0 0"/>
+  </joint>
+  <link name="left_wheel">
+    <visual>
+      <geometry><cylinder radius="0.024" length="0.026"/></geometry>
+      <material name="silver"><color rgba="0.72 0.72 0.72 1"/></material>
+    </visual>
+    <visual>
+      <geometry><cylinder radius="0.010" length="0.030"/></geometry>
+      <material name="hub"><color rgba="0.25 0.25 0.25 1"/></material>
+    </visual>
+    <collision><geometry><cylinder radius="0.024" length="0.026"/></geometry></collision>
+  </link>
+
+  <joint name="right_wheel_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="right_wheel"/>
+    <origin xyz="-0.033 -0.061 0.024" rpy="1.5708 0 0"/>
+  </joint>
+  <link name="right_wheel">
+    <visual>
+      <geometry><cylinder radius="0.024" length="0.026"/></geometry>
+      <material name="silver"><color rgba="0.72 0.72 0.72 1"/></material>
+    </visual>
+    <visual>
+      <geometry><cylinder radius="0.010" length="0.030"/></geometry>
+      <material name="hub"><color rgba="0.25 0.25 0.25 1"/></material>
+    </visual>
+    <collision><geometry><cylinder radius="0.024" length="0.026"/></geometry></collision>
+  </link>
+
+  <!-- 车头万向轮：支架和顶板、轮子、轮毂和刹车杆 -->
+  <joint name="caster_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="caster_link"/>
+    <origin xyz="0.045 0 0.020" rpy="0 0 3.14159"/>
+  </joint>
+  <link name="caster_link">
+    <!-- 左右两片支架，夹住轮子 -->
+    <visual>
+      <origin xyz="0 0.0115 0.002" rpy="0 0 0"/>
+      <geometry><box size="0.032 0.003 0.034"/></geometry>
+      <material name="caster_white"/>
+    </visual>
+    <visual>
+      <origin xyz="0 -0.0115 0.002" rpy="0 0 0"/>
+      <geometry><box size="0.032 0.003 0.034"/></geometry>
+      <material name="caster_white"/>
+    </visual>
+    <!-- 旋转座和顶部安装板，顶板贴着底盘下表面 -->
+    <visual>
+      <origin xyz="0 0 0.012" rpy="0 0 0"/>
+      <geometry><cylinder radius="0.017" length="0.010"/></geometry>
+      <material name="caster_white"/>
+    </visual>
+    <visual>
+      <origin xyz="0 0 0.021" rpy="0 0 0"/>
+      <geometry><box size="0.052 0.038 0.004"/></geometry>
+      <material name="caster_white"/>
+    </visual>
+  </link>
+
+  <joint name="caster_wheel_joint" type="fixed">
+    <parent link="caster_link"/>
+    <child link="caster_wheel_link"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+  <link name="caster_wheel_link">
+    <!-- 橡胶轮，半径21mm，轮底在z=0 -->
+    <visual>
+      <origin xyz="0 0 0" rpy="1.5708 0 0"/>
+      <geometry><cylinder radius="0.021" length="0.016"/></geometry>
+      <material name="caster_red"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="1.5708 0 0"/>
+      <geometry><cylinder radius="0.021" length="0.020"/></geometry>
+    </collision>
+  </link>
+
+  <joint name="caster_hub_joint" type="fixed">
+    <parent link="caster_link"/>
+    <child link="caster_hub_link"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+  <link name="caster_hub_link">
+    <!-- 轮毂、贯穿轮轴和顶板四角螺栓 -->
+    <visual>
+      <origin xyz="0 0 0" rpy="1.5708 0 0"/>
+      <geometry><cylinder radius="0.014" length="0.019"/></geometry>
+      <material name="caster_silver"/>
+    </visual>
+    <visual>
+      <origin xyz="0 0 0" rpy="1.5708 0 0"/>
+      <geometry><cylinder radius="0.0045" length="0.026"/></geometry>
+      <material name="caster_silver"/>
+    </visual>
+    <!-- 两侧外露的轮毂盖 -->
+    <visual>
+      <origin xyz="0 0.0145 0" rpy="1.5708 0 0"/>
+      <geometry><cylinder radius="0.007" length="0.004"/></geometry>
+      <material name="caster_silver"/>
+    </visual>
+    <visual>
+      <origin xyz="0 -0.0145 0" rpy="1.5708 0 0"/>
+      <geometry><cylinder radius="0.007" length="0.004"/></geometry>
+      <material name="caster_silver"/>
+    </visual>
+    <visual>
+      <origin xyz="0.020 0.014 0.023" rpy="0 0 0"/>
+      <geometry><cylinder radius="0.0025" length="0.002"/></geometry>
+      <material name="caster_silver"/>
+    </visual>
+    <visual>
+      <origin xyz="0.020 -0.014 0.023" rpy="0 0 0"/>
+      <geometry><cylinder radius="0.0025" length="0.002"/></geometry>
+      <material name="caster_silver"/>
+    </visual>
+    <visual>
+      <origin xyz="-0.020 0.014 0.023" rpy="0 0 0"/>
+      <geometry><cylinder radius="0.0025" length="0.002"/></geometry>
+      <material name="caster_silver"/>
+    </visual>
+    <visual>
+      <origin xyz="-0.020 -0.014 0.023" rpy="0 0 0"/>
+      <geometry><cylinder radius="0.0025" length="0.002"/></geometry>
+      <material name="caster_silver"/>
+    </visual>
+  </link>
+
+  <joint name="caster_brake_joint" type="fixed">
+    <parent link="caster_link"/>
+    <child link="caster_brake_link"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+  <link name="caster_brake_link">
+    <!-- 刹车杆 -->
+    <visual>
+      <origin xyz="0.030 0.010 0.017" rpy="0 0.12 0"/>
+      <geometry><box size="0.042 0.008 0.006"/></geometry>
+      <material name="caster_black"/>
+    </visual>
+    <visual>
+      <origin xyz="0.014 0.010 0.010" rpy="0 0 0"/>
+      <geometry><box size="0.010 0.008 0.012"/></geometry>
+      <material name="caster_black"/>
+    </visual>
+  </link>
+
+  <!-- 激光雷达的三根支撑柱，位于车头 -->
+  <joint name="laser_support_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="laser_support_link"/>
+    <origin xyz="0.040 0 0.059" rpy="0 0 3.14159"/>
+  </joint>
+  <link name="laser_support_link">
+    <visual>
+      <origin xyz="-0.018 0 0" rpy="0 0 0"/>
+      <geometry><cylinder radius="0.004" length="0.024"/></geometry>
+      <material name="white"><color rgba="0.95 0.95 0.95 1"/></material>
+    </visual>
+    <visual>
+      <origin xyz="0.018 0.018 0" rpy="0 0 0"/>
+      <geometry><cylinder radius="0.004" length="0.024"/></geometry>
+      <material name="white"><color rgba="0.95 0.95 0.95 1"/></material>
+    </visual>
+    <visual>
+      <origin xyz="0.018 -0.018 0" rpy="0 0 0"/>
+      <geometry><cylinder radius="0.004" length="0.024"/></geometry>
+      <material name="white"><color rgba="0.95 0.95 0.95 1"/></material>
+    </visual>
+  </link>
+
+  <!-- 激光雷达本体，挂在三根支柱上方；按雷达安装方向校正laser_link坐标轴 -->
+  <joint name="laser_joint" type="fixed">
+    <parent link="laser_support_link"/>
+    <child link="laser_link"/>
+    <origin xyz="0 0 0.029" rpy="0 3.14159 0"/>
+  </joint>
+  <link name="laser_link">
+    <visual>
+      <geometry><box size="0.053 0.045 0.034"/></geometry>
+      <material name="black"><color rgba="0.10 0.10 0.10 1"/></material>
+    </visual>
+    <visual>
+      <origin xyz="0 0 -0.017" rpy="0 0 0"/>
+      <geometry><cylinder radius="0.030" length="0.004"/></geometry>
+      <material name="black"><color rgba="0.10 0.10 0.10 1"/></material>
+    </visual>
+    <collision><geometry><box size="0.053 0.045 0.034"/></geometry></collision>
+  </link>
+</robot>
