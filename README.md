@@ -112,7 +112,7 @@
   ├── hardware/
   │   ├── 香橙派ROS2控制板-原理图.pdf      # 控制板原理图
   │   └── 香橙派Zero2W-原理图.pdf         # 主控板原理图
-  ├── orangepi_ros2_ws/                 # 香橙派端和ARM交叉编译
+  ├── orangepi_ros2_ws/                 # 香橙派端代码和ARM交叉编译
   │   ├── README.md                     # 交叉编译说明
   │   ├── install.sh                    # 安装Docker/QEMU环境
   │   ├── build.sh                      # 选择全部或单个包编译
@@ -128,40 +128,41 @@
   │       │   │   ├── imu_node.py        # IMU采集节点
   │       │   │   ├── odom_node.py       # 轮式里程计节点
   │       │   │   └── vel_node.py        # PID电机控制节点
-  │       │   ├── setup.py               # car_pkg安装配置
-  │       │   └── package.xml
+  │       │   ├── package.xml
+  │       │   └── setup.py               # car_pkg安装配置
   │       ├── cspc_lidar_sdk_ros2/       # D6激光雷达ROS2 SDK
   │       ├── launch/car_start.launch.py # 香橙派底盘启动文件
   │       ├── robot_localization/        # EKF功能包
   │       └── yaml/ekf.yaml              # EKF融合参数
-  └── vmware_ros2_ws/                    # 虚拟机端
-  └── src/car_pkg/
-  ├── car_pkg/key_node.py        # WASD遥控节点
-  ├── launch/car_start.launch.py # 模型/建图/导航启动文件
-  ├── urdf/
-  │   ├── car_model.urdf         # 小车URDF模型
-  │   └── base_plate.stl         # 底盘STL网格
-  ├── config/
-  │   ├── car_2d.lua             # Cartographer 2D配置
-  │   ├── nav2_params.yaml       # Nav2参数
-  │   └── ...                    # Cartographer官方Lua配置
-  ├── rviz/
-  │   ├── slam.rviz              # 建图RViz配置
-  │   └── nav2.rviz              # 导航RViz配置
-  ├── maps/
-  │   ├── map1.yaml              # 地图元数据
-  │   └── map1.pgm               # 栅格地图
-  ├── setup.py                   # car_pkg安装配置
-  └── package.x
+  └── vmware_ros2_ws/                    # 虚拟机端代码
+      └── src/car_pkg/
+          ├── car_pkg/key_node.py        # WASD遥控节点
+          ├── launch/car_start.launch.py # 模型/建图/导航启动文件
+          ├── urdf/
+          │   ├── car_model.urdf         # 小车URDF模型
+          │   └── base_plate.stl         # 底盘STL网格
+          ├── config/
+          │   ├── car_2d.lua             # Cartographer 2D配置
+          │   ├── nav2_params.yaml       # Nav2参数
+          │   └── ...                    # Cartographer官方Lua配置
+          ├── rviz/
+          │   ├── slam.rviz              # 建图RViz配置
+          │   └── nav2.rviz              # 导航RViz配置
+          ├── maps/
+          │   ├── map1.yaml              # 地图元数据
+          │   └── map1.pgm               # 栅格地图
+          ├── package.xml
+          └── setup.py                   # car_pkg安装配置
   ```
 
+- 完整源码：香橙派端在`orangepi_ros2_ws/src`，虚拟机端在`vmware_ros2_ws/src`，克隆仓库即可查看和编译。
 - 操作系统：虚拟机和香橙派都使用Ubuntu 24.04。
 - ROS2版本：ROS2 Jazzy。
 - 虚拟机软件：VMware Workstation，运行Ubuntu 24.04和RViz。
 - 建图与导航：Cartographer负责2D激光SLAM，`nav2_bringup`负责定位、规划、控制和恢复行为。
-- 底盘软件：`car_pkg`中的`imu_node`、`odom_node`、`ekf_node`、`vel_node`和`key_node`，使用Python和ROS2 Jazzy。
-- 交叉编译：`arm_ros2_ws`使用Docker和QEMU在x86_64电脑上编译ARM64程序，再推送到香橙派。
-- 模型与地图：URDF模型、Cartographer配置、Nav2参数和`map1.yaml`地图都放在`car_pkg`中，编译后随功能包安装。
+- 底盘软件：`car_pkg`中的`imu_node`、`odom_node`和`vel_node`负责IMU采集、轮式里程计和电机控制，虚拟机的`key_node`负责键盘遥控，`ekf_node`来自`robot_localization`功能包。
+- 交叉编译：`orangepi_ros2_ws`中的脚本使用Docker和QEMU在x86_64电脑上编译ARM64程序，再推送到香橙派。
+- 模型与地图：URDF模型、Cartographer配置、Nav2参数和`map1.yaml`地图都放在虚拟机的`car_pkg`中，编译后随功能包安装。
 
 - 软件配置层次：
 
