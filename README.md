@@ -2754,7 +2754,7 @@
 
 - 按住小车转动，尽量让轮子受摩擦力也转动，可以看到箭头位置和方向会随轮子转动变化：
 
-  <video src="assets/1.mp4"></video>
+  ![odom动画](assets/1.gif)
 
 ## 7 EKF数据融合节点发布
 
@@ -3460,7 +3460,7 @@
 
 - 按住小车转动，尽量让轮子受摩擦力也转动，可以看到箭头位置和方向会随轮子转动变化，并且看到的转动角度比没有融合前的更加精准：
 
-    <video src="assets/1.mp4"></video>
+    ![EKF动画](assets/1.gif)
 
 ## 8 小车控制节点发布
 
@@ -4903,7 +4903,7 @@
 
   ![273](assets/273.png)
   
-  <video src="assets/2.mp4"></video>
+  ![URDF动画](assets/2.gif)
   
 - 在`RobotModel`里展开`Links`和`Joints`，可以看到每个link的名称和TF层级；左右轮用`fixed`关节固定在车体上，避免关节状态发布频率低造成轮子滞后。
 
