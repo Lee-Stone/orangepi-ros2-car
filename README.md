@@ -274,9 +274,13 @@
 
   ![21](assets/21.png)
 
-- [小车底盘]()：￥14.99x1=￥14.99
+- [小车底盘](https://item.taobao.com/item.htm?abbucket=0&id=1097090631054&mi_id=0000E49d1ZiJ8lyILafy7qSi5vCQAen-q3HXsRtDDOARx6I&ns=1&spm=a21xtw.29178619.product_shelf.5.4aac3d37lLBQb1&xxc=taobaoSearch)：￥14.99x1=￥14.99
 
-- [Orange Pi Zero 2W ROS2主控板]()：￥149x1=￥149
+  ![335](assets/335.png)
+
+- [Orange Pi Zero 2W ROS2主控板](https://item.taobao.com/item.htm?abbucket=0&id=1099167963722&mi_id=0000QvOVpIHZOXGUddZRbe1lqEz-wVYpq-sd6pAz2eXE7n4&ns=1&skuId=6323476766607&spm=a21xtw.29178619.product_shelf.4.4aac3d37lLBQb1&xxc=taobaoSearch)：￥149x1=￥149
+
+  ![336](assets/336.png)
 
 ### 1.2 小车组装
 
